@@ -1,0 +1,19 @@
+#! /usr/bin/ruby
+#file = exec('ls ..')
+count = 0
+file = `ls ..`
+#puts file.class
+file.split("\n").each do |f|
+	fname = f.to_s
+	fsize = f.size
+	fsize = File.size("../#{f}")
+#	puts "#{fname} : #{fsize}\n"
+	if (File.size("../#{f}") < 1) then
+		puts " rm #{f}, OK?"
+		count += 1
+#		exec(" rm #{f}")
+	end
+end
+if count == 0 
+	puts "no empties\n"
+end
