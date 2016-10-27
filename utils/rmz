@@ -1,7 +1,7 @@
 #! /usr/bin/ruby
 #file = exec('ls ..')
 count = 0
-file = `ls ..`
+file = `ls .`
 #puts file.class
 file.split("\n").each do |f|
 	fname = f.to_s
