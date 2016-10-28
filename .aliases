@@ -1,12 +1,14 @@
 if [ `uname` == 'Darwin' ]; then
 	export BASEDIR=/Users/mk
+elif [ `uname` == 'Linux' ]; then
+	export BASEDIR=/home/mk
 fi
 alias a='		alias'
 alias cb='		cd $BASEDIR/bin'
+alias cD='		cd $BASEDIR/Documents'
 alias cdc='		cd $BASEDIR/c/chef-repo'
 alias cde='		cd $BASEDIR/Desktop'
 alias cdo='		cd $BASEDIR/Downloads'
-alias cg='		cd $BASEDIR/c/git'
 alias cm='		cd $mk0'
 alias cm1='		cd $mk1'
 alias cm2='		cd $mk2'
@@ -15,7 +17,7 @@ alias ctst='	cd $BASEDIR/tst'
 alias cu='		cd $BASEDIR/bin/utils'
 alias cx='		cd -'
 alias dd='		ls -al | grep ^d'
-alias la='		ls -alrt'
+alias la='		ls -ald ./\.*'
 alias lsl='		ls -lrt'
 alias ll='		ls -l'
 alias lxd='		ls -al | grep -v ^d'
@@ -29,3 +31,4 @@ alias sd3='		mk3=`pwd`'
 alias unp='		chmod 0777'
 alias va='		vi $BASEDIR/.aliases'
 alias vip='		vi $BASEDIR/.bash_profile'
+alias wh='		whoami'
