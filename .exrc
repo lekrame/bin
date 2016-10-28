@@ -1,3 +1,3 @@
 map! yyy 'a,'bw/tmp/buf
 set ai
-set ts=4
+set ts=2
