@@ -45,7 +45,7 @@ file.split("\n").each do |f|
 			puts "removing #{f}" if options[:verbose]
 			system(" rm #{f}")
 		else
-			puts "rm #{f}, OK?"
+			printf ("rm #{f}, OK? ")
 			gets
 			if $_ =~ /^[yY]/
 				system("rm #{forceflag} #{f}")
@@ -68,11 +68,6 @@ elsif options[:batch]
 		allfiles = flist.join(" ")
 		puts "deleting #{allfiles}" if options[:verbose]
 		system("rm #{forceflag} #{allfiles}")
-
-#		flist.each do |ff|
-#			puts "deleting #{ff}" if options[:verbose]
-#			system("rm #{forceflag} #{ff}")
-#		end
 	else
 		puts "chicken"
 	end
