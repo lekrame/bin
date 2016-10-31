@@ -1,19 +1,79 @@
-#! /usr/bin/ruby
-#file = exec('ls ..')
+#! /usr/bin/ruby -w
+require 'optparse'
+
+script = `basename "#{$0}"`.chomp
+options = {}
+forceflag = ""
+OptionParser.new do |opts|
+	opts.banner = "#{script} deletes empty files from the current directory"
+
+	opts.on("-h", "--help", "show help text") do
+		puts opts
+		exit
+	end
+
+	opts.on("-v", "--verbose", "echo forced deletes and summary") do
+		options[:verbose] = true
+	end
+
+	opts.on("-b", "--batch", "allow deletion of all files after one approval") do
+		options[:batch] = true
+	end
+
+	opts.on("-f", "--force", "skip approval and delete") do
+		options[:force] = true
+		forceflag = "-f "
+	end
+
+	opts.on("-l", "--list-only", "list but do not delete") do
+		options[:list] = true
+	end
+
+end.parse!
+
 count = 0
-file = `ls .`
-#puts file.class
+file = `ls -1`
+flist = []
 file.split("\n").each do |f|
-	fname = f.to_s
-	fsize = f.size
-	fsize = File.size("../#{f}")
-#	puts "#{fname} : #{fsize}\n"
-	if (File.size("../#{f}") < 1) then
-		puts " rm #{f}, OK?"
+	f.chomp!
+	f.chomp!
+	if (File.size("#{f}") < 1) then
 		count += 1
-#		exec(" rm #{f}")
+		if options[:batch] || options[:list]
+			flist << f
+		elsif options[:force] 
+			puts "removing #{f}" if options[:verbose]
+			system(" rm #{f}")
+		else
+			puts "rm #{f}, OK?"
+			gets
+			if $_ =~ /^[yY]/
+				system("rm #{forceflag} #{f}")
+			end
+		end
 	end
 end
+
 if count == 0 
-	puts "no empties\n"
+	puts "no empties\n" if options[:verbose]
+else 
+	puts flist.join("\n")
+end
+
+if options[:list]
+	exit
+elsif options[:batch]
+	printf "\nDelete all?"
+	if gets =~ /\A[yY]/
+		allfiles = flist.join(" ")
+		puts "deleting #{allfiles}" if options[:verbose]
+		system("rm #{forceflag} #{allfiles}")
+
+#		flist.each do |ff|
+#			puts "deleting #{ff}" if options[:verbose]
+#			system("rm #{forceflag} #{ff}")
+#		end
+	else
+		puts "chicken"
+	end
 end
