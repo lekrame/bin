@@ -1,0 +1,83 @@
+#! /usr/bin/ruby -w
+require 'optparse'
+
+script = `basename "#{$0}"`.chomp
+options = {}
+forceoption = ""
+kill9option = ""
+OptionParser.new do |opts|
+	opts.banner = "#{script} deletes empty files from the current directory"
+
+	opts.on("-h", "--help", "show help text") do
+		puts opts
+		exit
+	end
+
+	opts.on("-v", "--verbose", "echo forced kills and summary") do
+		options[:verbose] = true
+	end
+
+	opts.on("-b", "--batch", "allow killing of all selected processes after one approval") do
+		options[:batch] = true
+	end
+
+	opts.on("-f", "--force", "skip approval and kill") do
+		options[:force] = true
+		forceoption = "-f "
+	end
+
+	opts.on("-l", "--list-only", "list but do not kill") do
+		options[:list] = true
+	end
+
+	opts.on("-9", "use \"kill -9\"") do
+#		options[:k9] = true
+		kill9option = "-9"
+	end
+
+end.parse!
+
+count = 0
+plistall = `ps -h -o comm,pid`
+doomedplist = []
+doomedpidlist = []
+plistselect = []
+plistall.split("\n").each do |p|
+	p.chomp!
+	p.chomp!
+	cmd,pid = p.split(/[ \t]+/)
+	if cmd =~ /#{ARGV[0]}/ then
+		plistselect << p
+		count += 1
+		if options[:batch] || options[:list]
+			doomedplist << p
+			doomedpidlist << pid
+		elsif options[:force] 
+			puts "killing #{p}" if options[:verbose]
+			system("kill #{kill9option} #{pid}")
+		else
+			printf "kill #{pid}, OK? "
+			STDIN.gets
+			if $_ =~ /^[yY]/
+				system("kill #{kill9option} #{pid}")
+			end
+		end
+	end
+end
+
+if count == 0 
+	puts "none found\n"
+elsif options[:list] || options[:batch]
+	puts plistselect
+end
+
+if options[:batch]
+	printf "\nKill all? "
+	if STDIN.gets =~ /\A[yY]/
+		allprocs = doomedpidlist.join(" ")
+		puts "Killing #{doomedpidlist}" if options[:verbose]
+		system("kill #{kill9option} #{allprocs}")
+	else
+		puts "chicken"
+	end
+end
