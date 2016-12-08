@@ -38,7 +38,8 @@ OptionParser.new do |opts|
 end.parse!
 
 count = 0
-plistall = `ps -h -o comm,pid`
+plistall = []
+plistall = `ps -eh -o comm,pid`
 doomedplist = []
 doomedpidlist = []
 plistselect = []
