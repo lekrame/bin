@@ -1,7 +1,9 @@
 if [ `uname` == 'Darwin' ]; then
 	export BASEDIR=/Users/mk
 elif [ `uname` == 'Linux' ]; then
-	export BASEDIR=/home/mk
+	if [ `uname -v` =~ /[uU]buntu/ ]; then
+		export BASEDIR=/home/ubuntu
+	fi
 fi
 alias a='		alias'
 alias cb='		cd $BASEDIR/bin'
