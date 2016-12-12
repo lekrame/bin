@@ -1,7 +1,7 @@
 if [ `uname` == 'Darwin' ]; then
 	export BASEDIR=/Users/mk
 elif [ `uname` == 'Linux' ]; then
-	if [ `uname -v` =~ /[uU]buntu/ ]; then
+	if [[ `uname -v` =~ .*buntu.* ]] ; then
 		export BASEDIR=/home/ubuntu
 	fi
 fi
