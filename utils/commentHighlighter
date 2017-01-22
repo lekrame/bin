@@ -1,7 +1,9 @@
 #!/usr/bin/ruby
 file = File.new(ARGV[0],"r")
 file.each_line do |line|
-	if line.start_with?("####")
+	if line =~ /^#+$/
+		puts line
+	elsif line.start_with?("####")
 		line =~ /^#+ *(.+)$/
 		msg = $1.upcase
 		chars = msg.length
