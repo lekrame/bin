@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+require 'json'
+strng = ""
+while gets do
+	strng.concat $_
+end
+ss = JSON::parse strng
+puts JSON::pretty_generate(ss)
