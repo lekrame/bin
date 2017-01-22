@@ -1,0 +1,16 @@
+#!/usr/bin/ruby
+file = File.new(ARGV[0],"r")
+file.each_line do |line|
+	if line.start_with?("####")
+		line =~ /^#+ *(.+)$/
+		msg = $1.upcase
+		chars = msg.length
+		puts "#" * (chars + 6)
+		puts "##" + " " * (chars + 2) + "##"
+		puts "## " + msg + " ##"
+		puts "##" + " " * (chars + 2) + "##"
+		puts "#" * (chars + 6)
+	else
+		puts line
+	end
+end
